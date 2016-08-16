@@ -4,7 +4,7 @@
 
 # Site
 title: 海风博客
-subtitle: 吹往有书店的爱丽丝岛
+subtitle: 吹向爱丽丝岛
 description: 海风网，分享Web开发中的技术文章，分享生活中的灵感与体会，鼓励阅读，不读书则愚。
 author: Gallen Hu
 language: zh-CN
@@ -87,3 +87,5 @@ social:
 widget:
   title: 关于本站
   content: <p align="left">分享Web开发中的技术文章，分享生活中的灵感与体会，鼓励阅读，不读书则愚。</p>
+
+disqus_shortname: hinpc
