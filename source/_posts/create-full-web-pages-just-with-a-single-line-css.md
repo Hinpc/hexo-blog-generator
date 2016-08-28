@@ -6,7 +6,8 @@ tag:
  - CSS
 
 photos:
- - http://dn-doting.qbox.me/20141028-1.jpg
+ - https://dn-doting.qbox.me/20141028-1.jpg
+
 ---
 
 现代网站很多都在其主页放上一个全屏区域`section`。就算不是全屏幕，也至少占了全屏的80%~90%，通常完成这个工作这需要大量的开发时间和javascript代码。
