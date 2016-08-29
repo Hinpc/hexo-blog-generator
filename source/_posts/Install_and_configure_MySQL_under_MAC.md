@@ -13,13 +13,15 @@ photos:
 
 <!--more-->
 
-# Mac
+> Mac系统
 
 ## 安装MySQL
 
 通过官网安装包安装：  
+
 下载地址： [http://dev.mysql.com/downloads/mysql/](http://dev.mysql.com/downloads/mysql/)  
-我的安装版本： Mac OS X 10.11 (x86, 64-bit), DMG Archive
+
+选择适合你的安装版本, 我使用的是： Mac OS X 10.11 (x86, 64-bit), DMG Archive  
 
 安装过程直接下一步，中途会弹窗让你记录初始密码，复制下来以便后面修改。
 
@@ -91,7 +93,7 @@ Query OK, 0 rows affected, 1 warning (0.00 sec)
 
 ***
 
-# CentOS
+> CentOS系统
 
 ## 安装
 
@@ -99,6 +101,7 @@ Query OK, 0 rows affected, 1 warning (0.00 sec)
 ```js
 async function install () {
   awiat iFinishIt();
+  // 未完待续
   return continue();
 }
 ```
