@@ -1,5 +1,6 @@
 title: 在 React 中使用地图服务  
 date: 2016-09-05 21:01  
+modified: 2016-09-07 20:40  
 tag:
  - React
  - 地图
@@ -21,12 +22,13 @@ photos:
 export const loadMapResource = () => new Promise((resolve, reject) => {
   const key = 'replaceyourkeyhere';
   const script = document.createElement('script');
-  script.src = `http://webapi.amap.com/maps?v=1.3&key=${key}`;
+
+  document.body.appendChild(script);
 
   script.onload = () => resolve(script);
   script.onerror = () => reject(new Error('load map error'));
 
-  document.body.appendChild(script);
+  script.src = `http://webapi.amap.com/maps?v=1.3&key=${key}`;
 });
 
 export const getAmap = (domId, initPoint) => new AMap.Map(domId, {
@@ -35,6 +37,7 @@ export const getAmap = (domId, initPoint) => new AMap.Map(domId, {
 });
 ```
 `loadMapResource` 利用 `Promise` 来异步加载地图， `getAmap` 用来在 `domId` 这个节点上创建一个地图。
+注意要在 `onload` 事件之前将 script 插入到 body 中去。参考： http://stackoverflow.com/questions/16230886/trying-to-fire-onload-event-on-script-tag
 
 ## 调用部分：
 
