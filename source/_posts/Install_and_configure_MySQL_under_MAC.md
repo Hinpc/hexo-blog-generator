@@ -6,7 +6,7 @@ tag:
  - MySQL
 
 photos:
- - https://dn-hinpc.qbox.me/20160825-stock-photo-125631967.jpg  
+ - /img/2016/20160825-stock-photo-125631967.jpg  
 
 ---
 
@@ -122,7 +122,7 @@ rpm -ivh mysql-community-server-5.7.10-1.el6.x86_64.rpm
 ```
 [client]  
 default-character-set=utf8mb4  
-  
+
 [mysqld]  
 character_set_server=utf8mb4  
 ```
@@ -137,7 +137,7 @@ service mysqld start
 grep 'temporary password' /var/log/mysqld.log
 ```
 
-后面修改初始密码可以参考Mac版。 
+后面修改初始密码可以参考Mac版。
 
 注意：mysql5.7默认安装了密码安全检查插件，默认密码检查策略要求密码必须包含：大小写字母、数字和特殊符号，并且长度不能少于8位。否则会提示错误：
 ```

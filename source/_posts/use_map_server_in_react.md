@@ -6,7 +6,7 @@ tag:
  - 地图
 
 photos:
- - https://dn-hinpc.qbox.me/20160905-ukraine-map-1422625%20%281%29.jpg
+ - /img/2016/20160905-ukraine-map-1422625.jpg
 ---
 
 项目中用到了地图服务，以高德地图 JavaScript API 为例记录了部分代码，其他地图服务使用方法类似。需求：异步加载地图，增删点标记。
@@ -109,7 +109,7 @@ class Map extends React.Component {
 }
 ```
 
-页面 mount 之后检查是否存在全局变量 `amap`，不存在则加载地图，加载地图后通过 `getAmap` 方法新建一个地图对象。 
+页面 mount 之后检查是否存在全局变量 `amap`，不存在则加载地图，加载地图后通过 `getAmap` 方法新建一个地图对象。
 
 页面每次 update 时删除所有点标记，然后重新添加，添加过的点存储到 markerStore 集合（代码省掉了 constructor ）。因为我的项目中多个页面用到这些点，所以可以存储到 redux 中。
 

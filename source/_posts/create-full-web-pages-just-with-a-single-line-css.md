@@ -6,7 +6,7 @@ tag:
  - CSS
 
 photos:
- - https://dn-doting.qbox.me/20141028-1.jpg
+ - /img/2014/20141028-1.jpg
 
 ---
 
@@ -19,25 +19,25 @@ photos:
 
 他们使用`data`属性来保存高度比例比如:  `data-autosize="0.6" `  然后用JS来设置每一个区域的高度
 
-![1](https://dn-doting.qbox.me/20141028-2.jpg)
+![1](/img/2014/20141028-2.jpg)
 
 <a href="http://www.exposure.co" target="_blank"><u><strong>www.exposure.co</strong></u></a>
 
 Exposure 为他们的头部使用了一个固定的`90%`的高度，在缩放时使用JS来改变高度
 
-![1](https://dn-doting.qbox.me/20141028-3.jpg)
+![1](/img/2014/20141028-3.jpg)
 
 <u><strong><a href="http://www.nimber.com" target="_blank">www.nimber.com</a></strong></u>
 
 Nimber 使用的技术和<a href="http://www.spotify.com" target="_blank">spotify</a>类似，高度用JS设置为90%并加上`min-height`来确保这块区域高于视图区域，这样通常在手机端也能正确显示。
 
-![1](https://dn-doting.qbox.me/20141028-4.jpg)
+![1](/img/2014/20141028-4.jpg)
 
 <a href="http://www.flickr.com" target="_blank"><u><strong>www.flickr.com</strong></u></a>
 
 雅虎在今年早些时候推出了一个全屏版本的Flickr，设置每一个区域(section)的高度为100%，并且替换默认的滚动为JS控制的滚动高度，这里有一篇文章介绍它是<a href="http://code.flickr.net/2014/04/23/building-flickrs-new-hybrid-signed-out-homepage/" target="_blank">如何实现</a>的。
 
-![1](https://dn-doting.qbox.me/20141028-5.jpg)
+![1](/img/2014/20141028-5.jpg)
 
 前面所有的例子都是用`JavaScript`实现的，而下面就是见证奇迹的时刻:
 
@@ -57,7 +57,7 @@ Nimber 使用的技术和<a href="http://www.spotify.com" target="_blank">spotif
 
 无需任何辅助，视窗高度知道你的浏览器每一时刻的高度，并且可以由此设置你要的区域(section)高度，我用此方法做了一个Demo，我试着改变窗口大小它也能完美适应哦！
 
-![1](https://dn-doting.qbox.me/20141028-6.jpg)
+![1](/img/2014/20141028-6.jpg)
 
 <p style="text-align: center;">
 	<span style="font-size:16px;"><a href="http://codepen.io/ckor/pen/lBnxh/" target="_blank">查看代码</a>&nbsp;&nbsp;| &nbsp;<a href="http://codepen.io/ckor/full/cf2134280cd25e8ac7e57f1b05bb0b49/" target="_blank">查看<span style="line-height: 20.7999992370605px;">Demo</span></a></span>
@@ -72,7 +72,7 @@ Nimber 使用的技术和<a href="http://www.spotify.com" target="_blank">spotif
 
 至于浏览器的支持情况也是非常好的，它在测试网站<a href="http://caniuse.com" target="_blank"><strong><u>caniuse.com</u></strong></a>得到了78.38% 的结果，同时支持IE9+
 
-![1](https://dn-doting.qbox.me/20141028-7.jpg)
+![1](/img/2014/20141028-7.jpg)
 
 这个方法看起来是非常不错的，虽然没有得到大范围的使用测试，我也说不出这种技术有什么缺陷的地方，或者你该用与不该用。但是你可以视自身情况尝试一下。你可以先备份好你为浏览器写的一些JavaScript，或者找其他的替代。
 
@@ -82,9 +82,9 @@ Nimber 使用的技术和<a href="http://www.spotify.com" target="_blank">spotif
 
 来自[wunderlist](http://www.wunderlist.com/)的这货，在头部使用了一个` position:fixed `并给它设置了一个完美的`height:100%`，这是一个稍稍不同的例子，各有利弊，但确实是一个不用JS的例子！
 
-![1](https://dn-doting.qbox.me/20141028-8.jpg)
+![1](/img/2014/20141028-8.jpg)
 
 
 翻译自：https://medium.com/@ckor/make-full-screen-sections-with-1-line-of-css-b82227c75cbd  
 
-(转载请注明出处，本文完)
+(本文完，转载请注明出处)
