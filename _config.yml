@@ -70,8 +70,8 @@ theme: Daily
 deploy:
   type:
 
-favicon: https://dn-hinpc.qbox.me/20160807-hi-logo.png
-logo: https://dn-hinpc.qbox.me/20160807-hi-logo.svg
+favicon: /img/2016/20160807-hi-logo.png
+logo: /img/2016/20160807-hi-logo.svg
 
 nav:
   Home: .

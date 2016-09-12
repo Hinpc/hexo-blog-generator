@@ -25,7 +25,19 @@ export const loadMapResource = () => new Promise((resolve, reject) => {
 
   document.body.appendChild(script);
 
-  script.onload = () => resolve(script);
+  script.onload = () => script.onload = () => {
+    let timer = null;
+    const check = () => {
+      if (window.AMap && window.AMap.Map) {
+        resolve(script);
+        clearInterval(timer);
+      } else {
+        timer = setInterval(check, 500);
+      }
+    };
+
+    check();
+  };
   script.onerror = () => reject(new Error('load map error'));
 
   script.src = `http://webapi.amap.com/maps?v=1.3&key=${key}`;
@@ -37,7 +49,10 @@ export const getAmap = (domId, initPoint) => new AMap.Map(domId, {
 });
 ```
 `loadMapResource` 利用 `Promise` 来异步加载地图， `getAmap` 用来在 `domId` 这个节点上创建一个地图。
-注意要在 `onload` 事件之前将 script 插入到 body 中去。参考： http://stackoverflow.com/questions/16230886/trying-to-fire-onload-event-on-script-tag
+注意要在 `AMap.Map` 对象生成后才算是加载完毕。
+
+参考：
+http://stackoverflow.com/questions/16230886/trying-to-fire-onload-event-on-script-tag
 
 ## 调用部分：
 
