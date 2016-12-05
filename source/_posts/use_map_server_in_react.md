@@ -6,7 +6,7 @@ tag:
 - 地图
 
 photos:
-- /img/2016/20160905-ukraine-map-1422625.jpg
+- https://static.hinpc.com/image/2016/20160905-ukraine-map-1422625.jpg!width600
 ---
 
 项目中用到了地图服务，以高德地图 JavaScript API 为例记录了部分代码，其他地图服务使用方法类似。需求：异步加载地图，增删点标记。
@@ -120,4 +120,3 @@ http://stackoverflow.com/questions/16230886/trying-to-fire-onload-event-on-scrip
 https://github.com/ElemeFE/vue-amap
 
 [异步加载地图](http://lbs.amap.com/api/javascript-api/example/map/asynchronous-loading-map/)
-

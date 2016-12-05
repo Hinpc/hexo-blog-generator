@@ -4,8 +4,8 @@
 
 # Site
 title: 海风博客
-subtitle: 吹向爱丽丝岛
-description: 海风网，分享Web开发中的技术文章，分享生活中的灵感与体会，鼓励阅读，不读书则愚。
+subtitle: 分享代码与创意
+description: 海风网，分享Web开发中的技术文章，分享生活中的灵感与创意，鼓励阅读，不读书则愚。
 author: Gallen Hu
 language: zh-CN
 timezone:
@@ -70,8 +70,8 @@ theme: Daily
 deploy:
   type:
 
-favicon: /img/2016/20160807-hi-logo.png
-logo: /img/2016/20160807-hi-logo.svg
+favicon: https://static.hinpc.com/image/2016/20160807-hi-logo.png
+logo: https://static.hinpc.com/image/2016/20160807-hi-logo.svg
 
 nav:
   Home: .
@@ -86,6 +86,6 @@ social:
 
 widget:
   title: 关于本站
-  content: <p align="left">分享Web开发中的技术文章，分享生活中的灵感与体会，鼓励阅读，不读书则愚。</p>
+  content: <p align="left">分享Web开发中的技术文章，分享生活中的灵感与创意，鼓励阅读，不读书则愚。</p>
 
 disqus_shortname: hinpc

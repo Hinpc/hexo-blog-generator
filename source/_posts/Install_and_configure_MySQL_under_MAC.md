@@ -6,7 +6,7 @@ tag:
  - MySQL
 
 photos:
- - /img/2016/20160825-stock-photo-125631967.jpg  
+ - https://static.hinpc.com/image/2016/20160825-stock-photo-125631967.jpg!width600  
 
 ---
 

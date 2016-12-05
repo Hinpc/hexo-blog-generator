@@ -6,7 +6,7 @@ tag:
 - 服务器
 
 photos:
-- /img/2016/201611-ipad-605420_1920.jpg
+- https://static.hinpc.com/image/2016/201611-ipad-605420_1920.jpg!width600
 
 ---
 
@@ -122,6 +122,3 @@ stderr_logfile=/var/log/supervisor/caddy_stderr.log
 https://caddyserver.com/docs/getting-started
 
 http://depado.markdownblog.com/2015-12-07-setting-up-caddy-server-on-debian
-
-
-
