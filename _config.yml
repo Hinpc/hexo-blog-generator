@@ -70,8 +70,8 @@ theme: Daily
 deploy:
   type:
 
-favicon: https://static.hinpc.com/image/2016/20160807-hi-logo.png
-logo: https://static.hinpc.com/image/2016/20160807-hi-logo.svg
+favicon: https://cdn.rawgit.com/Hinpc/static/master/images/2016/20160807-hi-logo.png
+logo: https://cdn.rawgit.com/Hinpc/static/master/images/2016/20160807-hi-logo.png
 
 nav:
   Home: .

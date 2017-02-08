@@ -6,7 +6,7 @@ tag:
 - 服务器
 
 photos:
-- https://static.hinpc.com/image/2016/201611-ipad-605420_1920.jpg!width600
+- /img/2016/201611-ipad-605420_1920.jpg
 
 ---
 

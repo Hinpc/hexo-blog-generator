@@ -6,7 +6,8 @@ tag:
 - 地图
 
 photos:
-- https://static.hinpc.com/image/2016/20160905-ukraine-map-1422625.jpg!width600
+- /img/2016/20160905-ukraine-map-1422625.jpg
+
 ---
 
 项目中用到了地图服务，以高德地图 JavaScript API 为例记录了部分代码，其他地图服务使用方法类似。需求：异步加载地图，增删点标记。
