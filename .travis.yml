@@ -1,0 +1,19 @@
+language: node_js
+node_js: stable
+
+install:
+  - npm install
+  - npm install hexo-cli -g
+script:
+  - hexo clean
+  - hexo g
+
+after_success:
+  - git config --global user.name "Gallen.Hu"
+  - git config --global user.email "gallenhu@foxmail.com"
+  - cd ./public
+  - git init
+  - git add -A
+  - git commit -m "Travis CI Auto Builder"
+  - git checkout -b gh-pages
+  - git push --force -u https://${REPO_TOKEN}@github.com/Hinpc/hexo-blog-generator.git gh-pages

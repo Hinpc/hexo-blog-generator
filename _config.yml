@@ -70,8 +70,8 @@ theme: Daily
 deploy:
   type:
 
-favicon: https://cdn.rawgit.com/Hinpc/static/master/images/2016/20160807-hi-logo.png
-logo: https://cdn.rawgit.com/Hinpc/static/master/images/2016/20160807-hi-logo.png
+favicon: https://hinpc.com/asserts/img/hi-logo-with-bg.v17.8.png
+logo: https://hinpc.com/asserts/img/hi-logo-with-bg.v17.8.png
 
 nav:
   Home: .
@@ -89,3 +89,5 @@ widget:
   content: <p align="left">分享Web开发中的技术文章，分享生活中的灵感与创意，鼓励阅读，不读书则愚。</p>
 
 disqus_shortname: hinpc
+
+baidu_analytics: 329f0d1bce0a1973b19c15ff3c8c3bc8
