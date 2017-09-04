@@ -1,6 +1,8 @@
 language: node_js
 node_js: stable
 
+before_install:
+  - git clone https://github.com/GallenHu/hexo-theme-Daily.git themes/Daily
 install:
   - npm install
   - npm install hexo-cli -g
