@@ -1,5 +1,7 @@
 # blog
 
+[![Build Status](https://travis-ci.org/Hinpc/hexo-blog-generator.svg?branch=master)](https://travis-ci.org/Hinpc/hexo-blog-generator)
+
 ```bash
 $ git clone git@github.com:Hinpc/hexo-blog-generator.git
 $ cd hexo-blog-generator
