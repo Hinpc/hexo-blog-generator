@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<!-- Head tag -->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!--Description-->
+  
+  <meta name="description" content="海风网，分享Web开发中的技术文章，分享生活中的灵感与创意，鼓励阅读，不读书则愚。">
+  
+
+  <!--Author-->
+  
+  <meta name="author" content="Gallen Hu">
+  
+
+  <!--Open Graph Title-->
+  
+      <meta property="og:title" content="使用 JWTs 做浏览器端 RESTful API 认证"/>
+  
+  <!--Open Graph Description-->
+  
+      <meta property="og:description" content="海风网，分享Web开发中的技术文章，分享生活中的灵感与创意，鼓励阅读，不读书则愚。" />
+  
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="海风博客"/>
+  <!--Type page-->
+  
+      <meta property="og:type" content="article" />
+  
+  <!--Page Cover-->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- Title -->
+  
+  <title>使用 JWTs 做浏览器端 RESTful API 认证 - 海风博客</title>
+
+
+  <link rel="shortcut icon" href="https://hinpc.com/asserts/img/hi-logo-with-bg.v17.8.png">
+
+  <!-- Custom CSS/Sass -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!----------------------------
+  https://github.com/GallenHu/hexo-theme-Daily
+
+ _____            _   _
+|  __ \          (_) | |
+| |  | |   __ _   _  | |  _   _
+| |  | |  / _` | | | | | | | | |
+| |__| | | (_| | | | | | | |_| |
+|_____/   \__,_| |_| |_|  \__, |
+                          __/ |
+                         |___/
+
+    --------------------------->
+
+</head>
+
+
+<body>
+
+  <!-- Nav -->
+  <header class="site-header">
+  <div class="header-inside">
+    <div class="logo">
+      <a href="/" rel="home">
+        
+        <img src="https://hinpc.com/asserts/img/hi-logo-with-bg.v17.8.png" alt="海风博客" height="60">
+        
+      </a>
+    </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse">
+        <ul class="navbar-nav">
+          
+          
+            <li>
+              <a href="/.">
+                
+                  Home
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/archives">
+                
+                  Archive
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/about">
+                
+                  About
+                
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </nav>
+    <div class="button-wrap">
+      <button class="menu-toggle">Primary Menu</button>
+    </div>
+  </div>
+</header>
+
+
+  <!-- Main Content -->
+  <div class="content-area">
+  <div class="post">
+    <!-- Post Content -->
+    <div class="container">
+      <article>
+        <!-- Title date & tags -->
+        <div class="post-header">
+          <h1 class="entry-title">
+            使用 JWTs 做浏览器端 RESTful API 认证
+            
+          </h1>
+          <p class="posted-on">
+          2017-09-09
+          </p>
+          <div class="tags-links">
+            
+              
+                <a href="/tags/RESTful/" rel="tag">
+                  RESTful
+                </a>
+              
+                <a href="/tags/API认证/" rel="tag">
+                  API认证
+                </a>
+              
+                <a href="/tags/JWTs/" rel="tag">
+                  JWTs
+                </a>
+              
+            
+          </div>
+        </div>
+        <!-- Post Main Content -->
+        <div class="entry-content">
+          <p>梳理了一下做 RESTful API 认证的流程，使用 Node 结合 <code>passport.js</code>，最终实现：router 中间件做认证，通过认证后续流程可以获取到认证的用户信息。</p>
+<a id="more"></a>
+<p>参考：</p>
+<p><a href="https://cnodejs.org/topic/53c652bfc9507b404446ee40" target="_blank" rel="external">https://cnodejs.org/topic/53c652bfc9507b404446ee40</a></p>
+<p><a href="https://juejin.im/entry/58c3bfac570c35006d5b23dc" target="_blank" rel="external">https://juejin.im/entry/58c3bfac570c35006d5b23dc</a></p>
+<p><a href="http://passportjs.org/docs/overview" target="_blank" rel="external">http://passportjs.org/docs/overview</a></p>
+<p><a href="https://github.com/auth0/node-jsonwebtoken" target="_blank" rel="external">https://github.com/auth0/node-jsonwebtoken</a></p>
+<p>梳理了一下做 RESTful API 认证的流程，使用 Node 结合 <code>passport.js</code>，最终实现：router 中间件做认证，通过认证后续流程可以获取到认证的用户信息。</p>
+<h2 id="关于JWTs"><a href="#关于JWTs" class="headerlink" title="关于JWTs"></a>关于JWTs</h2><p>JSON Web Tokens</p>
+<ul>
+<li>可以在请求头发送 Authorization -&gt; Bearer  + token 来验证 API</li>
+<li>可以在请求体 body 中设置 access_token 字段来验证 API</li>
+</ul>
+<h2 id="API设计中的token的思路"><a href="#API设计中的token的思路" class="headerlink" title="API设计中的token的思路"></a>API设计中的token的思路</h2><ol>
+<li>设定一个密钥比如 <code>key = any%^Y&amp;)words</code></li>
+<li>这个 key 只有发送方(服务器)知道</li>
+<li>登录授权时，服务器组合各个参数，用用户名、密码、key、有效期按照一定的规则生成一个 access_key，然后返回给客户端(浏览器)。</li>
+<li>客户端请求需要授权的 API 时，需要附上前面的 access_key，服务器解析并验证 access_key 是否有效，然后做出对应的返回结果。</li>
+</ol>
+<h2 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h2><p>依赖：</p>
+<ul>
+<li>node-jsonwebtoken (<a href="https://github.com/auth0/node-jsonwebtoken" target="_blank" rel="external">https://github.com/auth0/node-jsonwebtoken</a>)</li>
+<li>passport.js</li>
+<li>passport-http-bearer (<a href="https://github.com/jaredhanson/passport-http-bearer" target="_blank" rel="external">https://github.com/jaredhanson/passport-http-bearer</a>)</li>
+</ul>
+<h3 id="1-入口文件-app-js"><a href="#1-入口文件-app-js" class="headerlink" title="1.入口文件 app.js"></a>1.入口文件 app.js</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</div><div class="line"><span class="keyword">const</span> passport = <span class="built_in">require</span>(<span class="string">'passport'</span>); <span class="comment">// 用户认证模块passport</span></div><div class="line"><span class="keyword">const</span> configurePassport = <span class="built_in">require</span>(<span class="string">'./configure_passport'</span>);</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">const</span> app = express();</div><div class="line">configurePassport(passport); <span class="comment">// 配置 passport</span></div><div class="line">app.use(passport.initialize());</div></pre></td></tr></table></figure>
+<p>入口文件里要配置并初始化 passport</p>
+<h3 id="2-登录成功-auth-js"><a href="#2-登录成功-auth-js" class="headerlink" title="2.登录成功 auth.js"></a>2.登录成功 auth.js</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> jwt = <span class="built_in">require</span>(<span class="string">'jsonwebtoken'</span>);</div><div class="line"></div><div class="line"><span class="comment">// 登录成功后</span></div><div class="line"><span class="keyword">const</span> token = jwt.sign(&#123;</div><div class="line">        id: user.get(<span class="string">'uid'</span>),</div><div class="line">      &#125;, config.jwtSecret, &#123; <span class="attr">expiresIn</span>: config.jwtExpiresIn &#125;);</div><div class="line"></div><div class="line"><span class="comment">// token返回给浏览器</span></div><div class="line"><span class="keyword">return</span> User.update(user, &#123; <span class="attr">logintoken</span>: token &#125;)</div><div class="line">	.then(<span class="function"><span class="params">()</span> =&gt;</span> res.send(&#123; token, <span class="attr">expiresIn</span>: config.jwtExpiresIn &#125;))</div><div class="line">	.catch()</div></pre></td></tr></table></figure>
+<p>登录成功后，结合 <strong>userId</strong>, <strong>自定义 Secret</strong>, <strong>有效期</strong> 生成一个 token ，token 存到数据库，并返回给浏览器。</p>
+<p>浏览器后续请求会附带这个 token，服务器拿到该 token 后进行验证，验证成功后，将得到：是否格式正确，是否在有效期内，以及加密前的 userId。如果 token 有效，再去数据库核对并取得对应 user。随后路由中间件将对验证的成功结果，user 信息进行处理(返回给浏览器看结果)。</p>
+<h3 id="3-配置文件-configure-passport-js"><a href="#3-配置文件-configure-passport-js" class="headerlink" title="3.配置文件 configure_passport.js"></a>3.配置文件 configure_passport.js</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> Strategy = <span class="built_in">require</span>(<span class="string">'passport-http-bearer'</span>).Strategy;</div><div class="line"><span class="keyword">const</span> User = <span class="built_in">require</span>(<span class="string">'../proxy/user'</span>); <span class="comment">// Model</span></div><div class="line"><span class="keyword">const</span> config = <span class="built_in">require</span>(<span class="string">'../config'</span>);</div><div class="line"><span class="keyword">const</span> jwt = <span class="built_in">require</span>(<span class="string">'jsonwebtoken'</span>);</div><div class="line"></div><div class="line"><span class="comment">// 这个配置就是告诉passport怎么来认证，什么情况认证通过，什么情况是认证失败</span></div><div class="line"><span class="built_in">module</span>.exports = <span class="function">(<span class="params">passportIns</span>) =&gt;</span> &#123;</div><div class="line">  passportIns.use(<span class="keyword">new</span> Strategy(<span class="function">(<span class="params">token, cb</span>) =&gt;</span> &#123;</div><div class="line">    <span class="comment">// jwt 会验证是否有效, 是否过了有效期</span></div><div class="line">    jwt.verify(token, config.jwtSecret, (err, decoded) =&gt; &#123;</div><div class="line">      <span class="keyword">if</span> (err) <span class="keyword">return</span> cb(err.name);</div><div class="line">      <span class="built_in">console</span>.log(<span class="string">'verifyInfo:'</span>, decoded);</div><div class="line"></div><div class="line">      <span class="comment">// token有效</span></div><div class="line">      <span class="keyword">return</span> User.getUsersByQuery(&#123; <span class="attr">logintoken</span>: token &#125;)</div><div class="line">        .then(<span class="function">(<span class="params">user</span>) =&gt;</span> &#123;</div><div class="line">          <span class="keyword">if</span> (!user) <span class="keyword">return</span> cb(<span class="string">'userNotFound'</span>);</div><div class="line">          <span class="keyword">return</span> cb(<span class="literal">null</span>, user);</div><div class="line">        &#125;)</div><div class="line">        .catch(<span class="function"><span class="params">dbErr</span> =&gt;</span> cb(dbErr));</div><div class="line">    &#125;);</div><div class="line">  &#125;));</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="4-路由配置-router-js"><a href="#4-路由配置-router-js" class="headerlink" title="4.路由配置 router.js"></a>4.路由配置 router.js</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 提交登录，登录成功会进入到前面part2的代码处</span></div><div class="line">router.post(<span class="string">'/api/v1/signin'</span>, signController.signin);</div><div class="line"><span class="comment">// 获取用户信息前，进行登录验证。 authMiddleware:权限验证中间件</span></div><div class="line">router.get(<span class="string">'/api/v1/userinfo'</span>, authMiddleware, userController.userInfo);</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">authMiddleware</span>(<span class="params">req, res, next</span>) </span>&#123;</div><div class="line">  <span class="keyword">const</span> fn = passport.authenticate(<span class="string">'bearer'</span>, (err, user) =&gt; &#123;</div><div class="line">    <span class="keyword">if</span> (err) <span class="keyword">return</span> res.send(errResponse(<span class="string">'认证失败'</span>, <span class="number">401</span>), <span class="number">401</span>);</div><div class="line">    <span class="keyword">if</span> (!user) <span class="keyword">return</span> res.send(errResponse(<span class="string">'未获取到用户'</span>, <span class="number">401</span>), <span class="number">401</span>);</div><div class="line">    </div><div class="line">    <span class="comment">// 认证通过</span></div><div class="line">    req.user = user;</div><div class="line">    <span class="keyword">return</span> next();</div><div class="line">  &#125;);</div><div class="line"></div><div class="line">  <span class="comment">// r -&gt; function(req, res, next) &#123;...&#125;</span></div><div class="line">  fn(req, res, next);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里最难理解。</p>
+<p>访问到<code>/api/v1/userinfo</code>时，</p>
+<p>首先进入 authMiddleware， 这里我是自定义回调函数（也就是自定义认证失败时返回给客户端的数据），if (err) 则返回“认证失败”，if (!user)则返回“未获取到用户”</p>
+<p>认证成功时，req 对象上加上一个 user 属性，值为 configure_passport.js 中拿到的 user，next()</p>
+<p>fn(req, res, next); 必须调用一次。因为 passport.authenticate 的返回值实际上是一个<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">function(req, res, next) &#123;...&#125;</div></pre></td></tr></table></figure></p>
+<p>这样子的函数，调用时才能把 <code>req, res, next</code> 传入进去。</p>
+<p>认证通过才会进入到 userController.userInfo 方法中，方法中可以通过 req.user 拿到登录的用户信息</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li><p>passport 的文档很难理解，用它来做 Restful API 相关的文档又很少。</p>
+</li>
+<li><p>API 认证简单说来是：服务器加密–传给客户端–客户端请求时携带凭证–服务器解密验证</p>
+</li>
+<li><p>刚写 Node，可能会有一些理解不对的地方，欢迎指出。</p>
+</li>
+</ul>
+
+        </div>
+      </article>
+    </div>
+    <!-- Comments -->
+    <div class="container">
+      
+<section id="comment">
+  <!-- <h1 class="title">留言</h1> -->
+
+  
+  <div id="disqus_thread">
+    <script type="text/javascript">
+    var disqus_config = function () {
+          this.page.url = window.location.href;
+          this.page.identifier = 'post-use-jwts-to-auth-api';
+          this.page.title = '使用 JWTs 做浏览器端 RESTful API 认证';
+      };
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+  
+</section>
+
+
+    </div>
+    <!-- Pre or Next -->
+    <div class="nav-links">
+      
+      
+        <div class="nav-next">
+          <a href="/2017/09/hexo-renderer-sass-install-in-china/" rel="prev">下一页 <span class="meta-arraw meta-arraw-right"></span></a>
+        </div>
+      
+    </div>
+
+  </div>
+</div>
+
+
+  <!-- Footer -->
+  <!-- Footer-widgets -->
+<div class="footer-widgets">
+  <div class="row inside-wrapper">
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">关于本站</h1>
+        <div class="custom-widget-content">
+          
+          <p align="left">分享Web开发中的技术文章，分享生活中的灵感与创意，鼓励阅读，不读书则愚。</p>
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">与我联系</h1>
+        <div class="widget-text">
+          
+            
+              <a href="https://github.com/GallenHu" class="icon icon-github" target="_blank">github</a>
+            
+              <a href="https://twitter.com/GallenHu" class="icon icon-twitter" target="_blank">twitter</a>
+            
+              <a href="mailto:gallenhu@foxmail.com" class="icon icon-mail" target="_blank">mail</a>
+            
+          
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">站内搜索</h1>
+        <div class="widget-text">
+          <form onSubmit="return appDaily.submitSearch('')">
+            <p>
+              <input type="text" placeholder="search..." id="homeSearchInput">
+            </p>
+            <!-- <input type="submit" value="GO"> -->
+          </form>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+<footer class="site-info">
+  <p>
+    <span>海风博客 &copy; 2017</span>
+    
+      <span class="split">|</span>
+      <span>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> with Theme <a href="https://github.com/GallenHu/hexo-theme-Daily" target="_blank">Daily</a></span>
+    
+  </p>
+</footer>
+
+
+  <!-- After footer scripts -->
+  <!-- scripts -->
+<script src="/js/app.js"></script>
+
+<script>
+  var disqus_shortname = 'hinpc';
+
+  
+  var disqus_url = 'http://blog.hinpc.com/2017/09/use-jwts-to-auth-api/';
+  
+
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<!-- baidu_analytics start -->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?329f0d1bce0a1973b19c15ff3c8c3bc8";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!-- baidu_analytics end -->
+
+
+
+
+</body>
+
+</html>

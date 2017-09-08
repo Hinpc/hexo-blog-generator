@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<!-- Head tag -->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!--Description-->
+  
+  <meta name="description" content="海风网，分享Web开发中的技术文章，分享生活中的灵感与创意，鼓励阅读，不读书则愚。">
+  
+
+  <!--Author-->
+  
+  <meta name="author" content="Gallen Hu">
+  
+
+  <!--Open Graph Title-->
+  
+      <meta property="og:title" content="在 React 中使用地图服务"/>
+  
+  <!--Open Graph Description-->
+  
+      <meta property="og:description" content="海风网，分享Web开发中的技术文章，分享生活中的灵感与创意，鼓励阅读，不读书则愚。" />
+  
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="海风博客"/>
+  <!--Type page-->
+  
+      <meta property="og:type" content="article" />
+  
+  <!--Page Cover-->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- Title -->
+  
+  <title>在 React 中使用地图服务 - 海风博客</title>
+
+
+  <link rel="shortcut icon" href="https://hinpc.com/asserts/img/hi-logo-with-bg.v17.8.png">
+
+  <!-- Custom CSS/Sass -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!----------------------------
+  https://github.com/GallenHu/hexo-theme-Daily
+
+ _____            _   _
+|  __ \          (_) | |
+| |  | |   __ _   _  | |  _   _
+| |  | |  / _` | | | | | | | | |
+| |__| | | (_| | | | | | | |_| |
+|_____/   \__,_| |_| |_|  \__, |
+                          __/ |
+                         |___/
+
+    --------------------------->
+
+</head>
+
+
+<body>
+
+  <!-- Nav -->
+  <header class="site-header">
+  <div class="header-inside">
+    <div class="logo">
+      <a href="/" rel="home">
+        
+        <img src="https://hinpc.com/asserts/img/hi-logo-with-bg.v17.8.png" alt="海风博客" height="60">
+        
+      </a>
+    </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse">
+        <ul class="navbar-nav">
+          
+          
+            <li>
+              <a href="/.">
+                
+                  Home
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/archives">
+                
+                  Archive
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/about">
+                
+                  About
+                
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </nav>
+    <div class="button-wrap">
+      <button class="menu-toggle">Primary Menu</button>
+    </div>
+  </div>
+</header>
+
+
+  <!-- Main Content -->
+  <div class="content-area">
+  <div class="post">
+    <!-- Post Content -->
+    <div class="container">
+      <article>
+        <!-- Title date & tags -->
+        <div class="post-header">
+          <h1 class="entry-title">
+            在 React 中使用地图服务
+            
+          </h1>
+          <p class="posted-on">
+          2016-09-05
+          </p>
+          <div class="tags-links">
+            
+              
+                <a href="/tags/React/" rel="tag">
+                  React
+                </a>
+              
+                <a href="/tags/地图/" rel="tag">
+                  地图
+                </a>
+              
+            
+          </div>
+        </div>
+        <!-- Post Main Content -->
+        <div class="entry-content">
+          <p>项目中用到了地图服务，以高德地图 JavaScript API 为例记录了部分代码，其他地图服务使用方法类似。需求：异步加载地图，增删点标记。</p>
+<a id="more"></a>
+<blockquote>
+<p>2016.11.15 修改异步加载地图 API 的方法</p>
+</blockquote>
+<h2 id="地图组件"><a href="#地图组件" class="headerlink" title="地图组件:"></a>地图组件:</h2><figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// amap.jsx</span></div><div class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span>;</div><div class="line"><span class="keyword">import</span> lazyLoadMapApi <span class="keyword">from</span> <span class="string">'./lib/lazyLoadMapApi'</span>;</div><div class="line"><span class="keyword">import</span> guid <span class="keyword">from</span> <span class="string">'./lib/guid'</span>;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">AMap</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">  componentDidMount() &#123;</div><div class="line">    <span class="keyword">const</span> mapElements = <span class="built_in">document</span>.querySelectorAll(<span class="string">'.el-react-amap-container .el-react-amap'</span>);</div><div class="line">    <span class="keyword">const</span> loadConfig = &#123;</div><div class="line">      key: <span class="string">'yourkey'</span>,</div><div class="line">    &#125;;</div><div class="line">    <span class="keyword">let</span> elementId;</div><div class="line"></div><div class="line">    lazyLoadMapApi(loadConfig).then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">      <span class="built_in">Array</span>.from(mapElements).forEach(<span class="function">(<span class="params">$el, index</span>) =&gt;</span> &#123;</div><div class="line">        elementId = guid(); <span class="comment">// 生成随机的id</span></div><div class="line">        $el.id = elementId;</div><div class="line">        <span class="keyword">this</span>[<span class="string">`mapInstance<span class="subst">$&#123;index&#125;</span>`</span>] = <span class="keyword">new</span> <span class="built_in">window</span>.AMap.Map(elementId);</div><div class="line">      &#125;)</div><div class="line">    &#125;);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  render() &#123;</div><div class="line">    <span class="keyword">return</span> (</div><div class="line">      &lt;div className=<span class="string">"el-react-amap-container"</span> style=&#123;styles.container&#125;&gt;</div><div class="line">        &lt;div className=<span class="string">"el-react-amap"</span> style=&#123;styles.map&#125;&gt;&lt;/div&gt;</div><div class="line">      &lt;<span class="regexp">/div&gt;</span></div><div class="line"><span class="regexp">    );</span></div><div class="line"><span class="regexp">  &#125;</span></div><div class="line"><span class="regexp">&#125;</span></div><div class="line"><span class="regexp"></span></div><div class="line"><span class="regexp">const styles = &#123;</span></div><div class="line"><span class="regexp">  container: &#123;</span></div><div class="line"><span class="regexp">    width: '100%',</span></div><div class="line"><span class="regexp">    height: '100%',</span></div><div class="line"><span class="regexp">  &#125;,</span></div><div class="line"><span class="regexp">  map: &#123;</span></div><div class="line"><span class="regexp">    width: '100%',</span></div><div class="line"><span class="regexp">    height: '100%',</span></div><div class="line"><span class="regexp">  &#125;,</span></div><div class="line"><span class="regexp">&#125;;</span></div><div class="line"><span class="regexp"></span></div><div class="line"><span class="regexp">export default AMap;</span></div></pre></td></tr></table></figure>
+<p>在地图的 api 加载完成后，找到 <code>.el-react-amap</code> 节点，并赋值一个随机的 id 属性，以供生成地图实例时使用。</p>
+<h2 id="异步加载API"><a href="#异步加载API" class="headerlink" title="异步加载API"></a>异步加载API</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// lazyLoadMapApi.js</span></div><div class="line"><span class="keyword">const</span> DEFAULT_CONFIG = &#123;</div><div class="line">  key: <span class="literal">null</span>,</div><div class="line">  v: <span class="number">1.3</span>,</div><div class="line">  protocol: <span class="built_in">window</span>.location.protocol || <span class="string">'https:'</span>,</div><div class="line">  hostAndPath: <span class="string">'webapi.amap.com/maps'</span>,</div><div class="line">  plugin: [],</div><div class="line">  callback: <span class="string">'mapInitCallback'</span>,</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">const</span> lazyLoadMapApi = <span class="function">(<span class="params">config = DEFAULT_CONFIG</span>) =&gt;</span> &#123;</div><div class="line">  <span class="keyword">const</span> _config = &#123; ...DEFAULT_CONFIG, ...config &#125;;</div><div class="line">  <span class="keyword">const</span> getScriptSrc = <span class="function">(<span class="params">cfg</span>) =&gt;</span> &#123;</div><div class="line">    <span class="keyword">let</span> scriptSrc = <span class="string">`<span class="subst">$&#123;cfg.protocol&#125;</span>//<span class="subst">$&#123;cfg.hostAndPath&#125;</span>?v=<span class="subst">$&#123;cfg.v&#125;</span>&amp;key=<span class="subst">$&#123;cfg.key&#125;</span>&amp;callback=<span class="subst">$&#123;cfg.callback&#125;</span>`</span>;</div><div class="line">    <span class="keyword">if</span> (cfg.plugin.length) scriptSrc += <span class="string">`&amp;plugin=<span class="subst">$&#123;cfg.plugin.join(<span class="string">','</span>)&#125;</span>`</span>;</div><div class="line">    <span class="keyword">return</span> scriptSrc;</div><div class="line">  &#125;;</div><div class="line"></div><div class="line">  <span class="keyword">if</span> (<span class="built_in">window</span>.AMap) <span class="keyword">return</span> <span class="built_in">Promise</span>.resolve();</div><div class="line"></div><div class="line">  <span class="keyword">const</span> script = <span class="built_in">document</span>.createElement(<span class="string">'script'</span>);</div><div class="line">  script.type = <span class="string">'text/javascript'</span>;</div><div class="line">  script.async = <span class="literal">true</span>;</div><div class="line">  script.defer = <span class="literal">true</span>;</div><div class="line">  script.src = getScriptSrc(_config);</div><div class="line"></div><div class="line">  <span class="keyword">const</span> scriptLoadingPromise = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</div><div class="line">    <span class="comment">// api 加载成功的回调函数</span></div><div class="line">    <span class="built_in">window</span>[_config.callback] = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">      <span class="keyword">return</span> resolve();</div><div class="line">    &#125;;</div><div class="line">    script.onerror = <span class="function"><span class="params">error</span> =&gt;</span> reject(error);</div><div class="line">  &#125;);</div><div class="line">  <span class="built_in">document</span>.head.appendChild(script);</div><div class="line">  <span class="keyword">return</span> scriptLoadingPromise;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> lazyLoadMapApi;</div></pre></td></tr></table></figure>
+<p>JavaScript API 入口脚本中加入 <code>callback</code> 参数，脚本加载完毕则会执行 window 下的 <code>callback</code> 指向函数。</p>
+<hr>
+<p>参考：</p>
+<p><a href="http://stackoverflow.com/questions/16230886/trying-to-fire-onload-event-on-script-tag" target="_blank" rel="external">http://stackoverflow.com/questions/16230886/trying-to-fire-onload-event-on-script-tag</a></p>
+<p><a href="https://github.com/ElemeFE/vue-amap" target="_blank" rel="external">https://github.com/ElemeFE/vue-amap</a></p>
+<p><a href="http://lbs.amap.com/api/javascript-api/example/map/asynchronous-loading-map/" target="_blank" rel="external">异步加载地图</a></p>
+
+        </div>
+      </article>
+    </div>
+    <!-- Comments -->
+    <div class="container">
+      
+<section id="comment">
+  <!-- <h1 class="title">留言</h1> -->
+
+  
+  <div id="disqus_thread">
+    <script type="text/javascript">
+    var disqus_config = function () {
+          this.page.url = window.location.href;
+          this.page.identifier = 'post-use_map_server_in_react';
+          this.page.title = '在 React 中使用地图服务';
+      };
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+  
+</section>
+
+
+    </div>
+    <!-- Pre or Next -->
+    <div class="nav-links">
+      
+        <div class="nav-previous">
+          <a href="/2016/11/use-caddy-to-build-https-server/" rel="prev"><span class="meta-arraw meta-arraw-left"></span> 上一页</a>
+        </div>
+      
+      
+        <div class="nav-next">
+          <a href="/2016/08/Install_and_configure_MySQL_under_MAC/" rel="prev">下一页 <span class="meta-arraw meta-arraw-right"></span></a>
+        </div>
+      
+    </div>
+
+  </div>
+</div>
+
+
+  <!-- Footer -->
+  <!-- Footer-widgets -->
+<div class="footer-widgets">
+  <div class="row inside-wrapper">
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">关于本站</h1>
+        <div class="custom-widget-content">
+          
+          <p align="left">分享Web开发中的技术文章，分享生活中的灵感与创意，鼓励阅读，不读书则愚。</p>
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">与我联系</h1>
+        <div class="widget-text">
+          
+            
+              <a href="https://github.com/GallenHu" class="icon icon-github" target="_blank">github</a>
+            
+              <a href="https://twitter.com/GallenHu" class="icon icon-twitter" target="_blank">twitter</a>
+            
+              <a href="mailto:gallenhu@foxmail.com" class="icon icon-mail" target="_blank">mail</a>
+            
+          
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">站内搜索</h1>
+        <div class="widget-text">
+          <form onSubmit="return appDaily.submitSearch('')">
+            <p>
+              <input type="text" placeholder="search..." id="homeSearchInput">
+            </p>
+            <!-- <input type="submit" value="GO"> -->
+          </form>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+<footer class="site-info">
+  <p>
+    <span>海风博客 &copy; 2017</span>
+    
+      <span class="split">|</span>
+      <span>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> with Theme <a href="https://github.com/GallenHu/hexo-theme-Daily" target="_blank">Daily</a></span>
+    
+  </p>
+</footer>
+
+
+  <!-- After footer scripts -->
+  <!-- scripts -->
+<script src="/js/app.js"></script>
+
+<script>
+  var disqus_shortname = 'hinpc';
+
+  
+  var disqus_url = 'http://blog.hinpc.com/2016/09/use_map_server_in_react/';
+  
+
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<!-- baidu_analytics start -->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?329f0d1bce0a1973b19c15ff3c8c3bc8";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!-- baidu_analytics end -->
+
+
+
+
+</body>
+
+</html>

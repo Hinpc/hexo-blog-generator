@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<!-- Head tag -->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!--Description-->
+  
+  <meta name="description" content="海风网，分享Web开发中的技术文章，分享生活中的灵感与创意，鼓励阅读，不读书则愚。">
+  
+
+  <!--Author-->
+  
+  <meta name="author" content="Gallen Hu">
+  
+
+  <!--Open Graph Title-->
+  
+      <meta property="og:title" content="使用 Caddy 快速搭建高效自动的 HTTPS 服务器"/>
+  
+  <!--Open Graph Description-->
+  
+      <meta property="og:description" content="海风网，分享Web开发中的技术文章，分享生活中的灵感与创意，鼓励阅读，不读书则愚。" />
+  
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="海风博客"/>
+  <!--Type page-->
+  
+      <meta property="og:type" content="article" />
+  
+  <!--Page Cover-->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- Title -->
+  
+  <title>使用 Caddy 快速搭建高效自动的 HTTPS 服务器 - 海风博客</title>
+
+
+  <link rel="shortcut icon" href="https://hinpc.com/asserts/img/hi-logo-with-bg.v17.8.png">
+
+  <!-- Custom CSS/Sass -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!----------------------------
+  https://github.com/GallenHu/hexo-theme-Daily
+
+ _____            _   _
+|  __ \          (_) | |
+| |  | |   __ _   _  | |  _   _
+| |  | |  / _` | | | | | | | | |
+| |__| | | (_| | | | | | | |_| |
+|_____/   \__,_| |_| |_|  \__, |
+                          __/ |
+                         |___/
+
+    --------------------------->
+
+</head>
+
+
+<body>
+
+  <!-- Nav -->
+  <header class="site-header">
+  <div class="header-inside">
+    <div class="logo">
+      <a href="/" rel="home">
+        
+        <img src="https://hinpc.com/asserts/img/hi-logo-with-bg.v17.8.png" alt="海风博客" height="60">
+        
+      </a>
+    </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse">
+        <ul class="navbar-nav">
+          
+          
+            <li>
+              <a href="/.">
+                
+                  Home
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/archives">
+                
+                  Archive
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/about">
+                
+                  About
+                
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </nav>
+    <div class="button-wrap">
+      <button class="menu-toggle">Primary Menu</button>
+    </div>
+  </div>
+</header>
+
+
+  <!-- Main Content -->
+  <div class="content-area">
+  <div class="post">
+    <!-- Post Content -->
+    <div class="container">
+      <article>
+        <!-- Title date & tags -->
+        <div class="post-header">
+          <h1 class="entry-title">
+            使用 Caddy 快速搭建高效自动的 HTTPS 服务器
+            
+          </h1>
+          <p class="posted-on">
+          2016-11-24
+          </p>
+          <div class="tags-links">
+            
+              
+                <a href="/tags/caddy/" rel="tag">
+                  caddy
+                </a>
+              
+                <a href="/tags/https/" rel="tag">
+                  https
+                </a>
+              
+                <a href="/tags/服务器/" rel="tag">
+                  服务器
+                </a>
+              
+            
+          </div>
+        </div>
+        <!-- Post Main Content -->
+        <div class="entry-content">
+          <p>Caddy 是一个用 Golang 写的高效 Web Server，相比 Nginx，它的配置和使用要简单很多，并且支持自动化 HTTPS。</p>
+<a id="more"></a>
+<p>官网：<a href="https://caddyserver.com/" target="_blank" rel="external">https://caddyserver.com/</a></p>
+<p>官方文档：<a href="https://caddyserver.com/docs/getting-started" target="_blank" rel="external">https://caddyserver.com/docs/getting-started</a></p>
+<p>这里介绍本站的 Caddy 服务器配置过程。从 Nginx 换到 Caddy 整个过程不到10分钟，官方甚至有一个28秒的<a href="https://www.youtube.com/watch?time_continue=28&amp;v=nk4EWHvvZtI" target="_blank" rel="external">配置视频</a>。</p>
+<h2 id="1-快速上手"><a href="#1-快速上手" class="headerlink" title="1. 快速上手"></a>1. 快速上手</h2><h3 id="1-1-下载安装"><a href="#1-1-下载安装" class="headerlink" title="1.1 下载安装"></a>1.1 下载安装</h3><p>进入 <a href="https://caddyserver.com/download" target="_blank" rel="external">下载页面</a> 勾选需要的模块，选择平台进行下载 。（我的是 Ubuntu x64，因此选择了Linux 64-bit，下载后再上传到 VPS，因为链接是生成的，没有固定链接，囧）</p>
+<p>下载后的压缩文件 <code>caddy_linux_amd64_custom.tar.gz</code> 放到网站根目录（跟 index.html 同级），进行解压：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ tar zxvf caddy_linux_amd64_custom.tar.gz</div></pre></td></tr></table></figure>
+<p>会得到 caddy 文件以及 init 文件夹和其他杂项文件。</p>
+<h3 id="1-2-运行"><a href="#1-2-运行" class="headerlink" title="1.2 运行"></a>1.2 运行</h3><p>在 caddy 解压出来的目录（网站根目录）执行 <code>./caddy</code> ，这时访问 <code>localhost:2015</code> 你的网站应该已经愉快地跑起来了。如果你在 vps 上进行的此操作，远程访问 <a href="http://你的ip:2015" target="_blank" rel="external">http://你的ip:2015</a> 应该也能看到你的站点了。</p>
+<h2 id="2-配置-Caddy"><a href="#2-配置-Caddy" class="headerlink" title="2. 配置 Caddy"></a>2. 配置 Caddy</h2><p>如何自定义 Caddy 服务呢？在你的站点目录里创建一个名为 <code>Caddyfile</code> 的文件，文件的第一行写上监听地址，如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">localhost:8080</div></pre></td></tr></table></figure>
+<p>重新启动 Caddy：执行  <code>./caddy</code> ，你会发现站点已经运行在8080端口了。</p>
+<p>Caddyfile 可以在其他目录，也可以命名为其他你喜欢的名字。只需要在启动 Caddy 时告诉它配置文件在哪：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span><span class="bash"> caddy -conf=<span class="string">"../path/to/Caddyfile"</span></span></div></pre></td></tr></table></figure>
+<p>Caddyfile 语法：<a href="https://caddyserver.com/docs/caddyfile" target="_blank" rel="external">查看</a></p>
+<h2 id="3-实现自动化-HTTPS"><a href="#3-实现自动化-HTTPS" class="headerlink" title="3. 实现自动化 HTTPS"></a>3. 实现自动化 HTTPS</h2><p>Caddy 自动地为你的站点启用 HTTPS。注意：需要配置 host 不能为空，也不能是 localhost 或 ip 地址。</p>
+<p>我的静态博客的配置是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">blog.hinpc.com &#123;</div><div class="line">    root /home/blog.hinpc.com/www #换成你的网站路径</div><div class="line">    gzip</div><div class="line">    log ../access.log</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>执行  <code>./caddy</code> ，网站已启动，并且支持 HTTPS 了。它的证书是由 <a href="https://letsencrypt.org/" target="_blank" rel="external">Let’s Encrypt</a> 实现的，并且自动为你的网站申请和续期。</p>
+<h2 id="4-使用-supservisor-来运行-Caddy"><a href="#4-使用-supservisor-来运行-Caddy" class="headerlink" title="4. 使用 supservisor 来运行 Caddy"></a>4. 使用 supservisor 来运行 Caddy</h2><p>在你的 <code>supervisord.conf</code> 文件中，<code>[supervisord]</code> 区域下配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">minfds=4096</div></pre></td></tr></table></figure>
+<p> <code>supervisord.conf</code> 中添加：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[program:caddy]</div><div class="line">directory=/etc/caddy/ ## 换成你的目录</div><div class="line">command=/etc/caddy/caddy -conf=&quot;/etc/caddy/Caddyfile&quot; ## 换成你的配置文件</div><div class="line">user=www-data</div><div class="line">autostart=true</div><div class="line">autorestart=true</div><div class="line">stdout_logfile=/var/log/supervisor/caddy_stdout.log</div><div class="line">stderr_logfile=/var/log/supervisor/caddy_stderr.log</div></pre></td></tr></table></figure>
+<p>启用：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> supervisorctl reread</span></div><div class="line"><span class="meta">#</span><span class="bash"> supervisorctl add caddy</span></div><div class="line"><span class="meta">#</span><span class="bash"> supervisorctl start caddy</span></div></pre></td></tr></table></figure>
+<hr>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="https://caddyserver.com/docs/getting-started" target="_blank" rel="external">https://caddyserver.com/docs/getting-started</a></p>
+<p><a href="http://depado.markdownblog.com/2015-12-07-setting-up-caddy-server-on-debian" target="_blank" rel="external">http://depado.markdownblog.com/2015-12-07-setting-up-caddy-server-on-debian</a></p>
+
+        </div>
+      </article>
+    </div>
+    <!-- Comments -->
+    <div class="container">
+      
+<section id="comment">
+  <!-- <h1 class="title">留言</h1> -->
+
+  
+  <div id="disqus_thread">
+    <script type="text/javascript">
+    var disqus_config = function () {
+          this.page.url = window.location.href;
+          this.page.identifier = 'post-use-caddy-to-build-https-server';
+          this.page.title = '使用 Caddy 快速搭建高效自动的 HTTPS 服务器';
+      };
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+  
+</section>
+
+
+    </div>
+    <!-- Pre or Next -->
+    <div class="nav-links">
+      
+        <div class="nav-previous">
+          <a href="/2017/09/hexo-renderer-sass-install-in-china/" rel="prev"><span class="meta-arraw meta-arraw-left"></span> 上一页</a>
+        </div>
+      
+      
+        <div class="nav-next">
+          <a href="/2016/09/use_map_server_in_react/" rel="prev">下一页 <span class="meta-arraw meta-arraw-right"></span></a>
+        </div>
+      
+    </div>
+
+  </div>
+</div>
+
+
+  <!-- Footer -->
+  <!-- Footer-widgets -->
+<div class="footer-widgets">
+  <div class="row inside-wrapper">
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">关于本站</h1>
+        <div class="custom-widget-content">
+          
+          <p align="left">分享Web开发中的技术文章，分享生活中的灵感与创意，鼓励阅读，不读书则愚。</p>
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">与我联系</h1>
+        <div class="widget-text">
+          
+            
+              <a href="https://github.com/GallenHu" class="icon icon-github" target="_blank">github</a>
+            
+              <a href="https://twitter.com/GallenHu" class="icon icon-twitter" target="_blank">twitter</a>
+            
+              <a href="mailto:gallenhu@foxmail.com" class="icon icon-mail" target="_blank">mail</a>
+            
+          
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">站内搜索</h1>
+        <div class="widget-text">
+          <form onSubmit="return appDaily.submitSearch('')">
+            <p>
+              <input type="text" placeholder="search..." id="homeSearchInput">
+            </p>
+            <!-- <input type="submit" value="GO"> -->
+          </form>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+<footer class="site-info">
+  <p>
+    <span>海风博客 &copy; 2017</span>
+    
+      <span class="split">|</span>
+      <span>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> with Theme <a href="https://github.com/GallenHu/hexo-theme-Daily" target="_blank">Daily</a></span>
+    
+  </p>
+</footer>
+
+
+  <!-- After footer scripts -->
+  <!-- scripts -->
+<script src="/js/app.js"></script>
+
+<script>
+  var disqus_shortname = 'hinpc';
+
+  
+  var disqus_url = 'http://blog.hinpc.com/2016/11/use-caddy-to-build-https-server/';
+  
+
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<!-- baidu_analytics start -->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?329f0d1bce0a1973b19c15ff3c8c3bc8";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<!-- baidu_analytics end -->
+
+
+
+
+</body>
+
+</html>
